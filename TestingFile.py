@@ -11,13 +11,19 @@ pygame.display.set_icon(icon)
 # Player
 playerImg = pygame.image.load('spaceship.png')
 playerImg = pygame.transform.scale(playerImg, (50, 50))
+playerImg1 = playerImg
 playerX = 100
 playerY = 100
 playerX_change = 0
 playerY_change = 0
+# Player facing
+playerImgLeft = pygame.transform.rotate(playerImg, 270)
+playerImgRight = pygame.transform.rotate(playerImg, 90)
+playerImgTop = pygame.transform.rotate(playerImg, 0)
+playerImgDown = pygame.transform.rotate(playerImg, 180)
 
 def player(x, y):
-    screen.blit(playerImg, (x, y))
+    screen.blit(playerImg1, (x, y))
 
 #background
 bg = pygame.image.load("bg.jpeg")
@@ -61,7 +67,7 @@ def planet_ring():
 
 # Collision
 def isCollision(playerX, playerY, planetX, planetY):
-    if playerX > planetX - 10 and playerX < planetX + 10 and playerY > planetY - 10 and playerY < planetY + 10:
+    if playerX > planetX - 20 and playerX < planetX + 20 and playerY > planetY - 20 and playerY < planetY + 20:
         return True
     return False
 
@@ -113,13 +119,17 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.5
+                playerX_change = -0.7
+                playerImg1 = playerImgRight
             if event.key == pygame.K_RIGHT:
-                playerX_change = 0.5
+                playerX_change = 0.7
+                playerImg1 = playerImgLeft
             if event.key == pygame.K_UP:
-                playerY_change = -0.5
+                playerY_change = -0.7
+                playerImg1 = playerImg
             if event.key == pygame.K_DOWN:
-                playerY_change = 0.5
+                playerY_change = 0.7
+                playerImg1 = playerImgDown
         if event.type == pygame.KEYUP:
             playerX_change = 0
             playerY_change = 0
