@@ -8,12 +8,22 @@ pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('astronaut.jpg')
 pygame.display.set_icon(icon)
 
+# Player
+playerImg = pygame.image.load('spaceship.png')
+playerImg = pygame.transform.scale(playerImg, (50, 50))
+playerX = 100
+playerY = 100
+playerX_change = 0
+playerY_change = 0
+
+def player(x, y):
+    screen.blit(playerImg, (x, y))
+
 #background
 bg = pygame.image.load("bg.jpeg")
 bg = pygame.transform.scale(bg, (800,800))
 
 # Planets
-
 sun1 = pygame.image.load('sun.png')
 sun1 = pygame.transform.scale(sun1, (150, 150))
 sunX = 350
@@ -52,12 +62,38 @@ def planet_cracked():
 running = True
 while running:
     screen.fill((0,0,0))
-    planet_redblueX=planet_redblueX+1
-    planet_greenY=planet_greenY-1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                playerX_change = -0.3
+            if event.key == pygame.K_RIGHT:
+                playerX_change = 0.3
+            if event.key == pygame.K_UP:
+                playerY_change = -0.3
+            if event.key == pygame.K_DOWN:
+                playerY_change = 0.3
+        if event.type == pygame.KEYUP:
+            playerX_change = 0
+            playerY_change = 0
+
+    playerX += playerX_change
+    playerY += playerY_change
+
+    if playerX <= 0:
+        playerX = 0
+    elif playerX >= 750:
+        playerX = 750
+
+    if playerY <= 0:
+        playerY = 0
+    elif playerY >= 750:
+        playerY = 750
+
     background()
+    player(playerX, playerY)
     sun()     
     planet_redblue()
     planet_frozen()
