@@ -3,7 +3,7 @@ from pygame import mixer
 
 pygame.init()
 
-screen = pygame.display.set_mode((1300,900))
+screen = pygame.display.set_mode((1200,700))
 
 pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('astronaut.jpg')
@@ -31,7 +31,7 @@ def player(x, y):
 
 #background
 bg = pygame.image.load("bg.jpeg")
-bg = pygame.transform.scale(bg, (1300,900))
+bg = pygame.transform.scale(bg, (1200,700))
 
 #music
 mixer.music.load('bgmusic.mp3')
@@ -40,23 +40,28 @@ mixer.music.play(-1)
 # Planets
 sun1 = pygame.image.load('sun.png')
 sun1 = pygame.transform.scale(sun1, (250, 250))
-sunX = 510
-sunY = 355
+sunX = 470
+sunY = 260
 
 planet_green1 = pygame.image.load('planet_green.png')
 planet_green1 = pygame.transform.scale(planet_green1, (100, 100))
 planet_greenX = 580
-planet_greenY = 120
+planet_greenY = 80
 
 planet_redblue1 = pygame.image.load('planet_redblue.png')
 planet_redblue1 = pygame.transform.scale(planet_redblue1, (70, 70))
-planet_redblueX = 330
-planet_redblueY = 700
+planet_redblueX = 350
+planet_redblueY = 525
 
 planet_ring1 = pygame.image.load('planet_ring.png')
 planet_ring1 = pygame.transform.scale(planet_ring1, (110, 65))
-planet_ringX = 850
-planet_ringY = 700
+planet_ringX = 800
+planet_ringY = 530
+
+earth1 = pygame.image.load('earth.png')
+earth1 = pygame.transform.scale(earth1, (30, 30))
+earthX = 20
+earthY = 20
 
 def background():
     screen.blit(bg, (0,0))
@@ -72,6 +77,9 @@ def planet_green():
 
 def planet_ring():
     screen.blit(planet_ring1, (planet_ringX, planet_ringY))
+    
+def earth():
+    screen.blit(earth1, (earthX, earthY))
 
 # Collision
 def isCollision(playerX, playerY, planetX, planetY):
@@ -79,7 +87,7 @@ def isCollision(playerX, playerY, planetX, planetY):
         return True
     return False
 
-def dodgingGame():
+def waterGame():
     running = True
     while running:
         screen.fill((255,255,255))
@@ -94,14 +102,6 @@ def dodgingGame():
                     return
 
         pygame.display.update()
-        
-def movePlanet(pl):
-    for x in range (0,50):
-        planet_greenX=planet_greenX+1
-        planet_greenY=planet_greenY+1
-    for z in range(0,50):
-        planet_greenX=planet_greenX-1
-        planet_greenY=planet_greenY-1
 
 counter = 0
 counter2 = 240
@@ -114,14 +114,14 @@ while running:
     collision_green = isCollision(playerX, playerY, planet_greenX, planet_greenY)
     collision_ring = isCollision(playerX, playerY, planet_ringX, planet_ringY)
 
-    if collision_redblue:
-        dodgingGame()
+    if collision_ring:
+        waterGame()
         playerX = 100
         playerY = 100
     elif collision_green:
         print('Collided with the green planet!')
-    elif collision_ring:
-        print('Collided with the ring planet!')
+    elif collision_redblue:
+        print('Collided with the redblue planet!')
 
     for event in pygame.event.get():
         
@@ -161,8 +161,8 @@ while running:
 
     if playerY <= 0:
         playerY = 0
-    elif playerY >= 850:
-        playerY = 850
+    elif playerY >= 750:
+        playerY = 750
         
     #planetmovement  
     if(counter%400 > 200):
@@ -171,10 +171,10 @@ while running:
         planet_greenX=planet_greenX-.3
     if(counter%300 > 150):
         planet_redblueX=planet_redblueX-.4
-        planet_redblueY=planet_redblueY+.4
+        planet_redblueY=planet_redblueY-.4
     else:        
         planet_redblueX=planet_redblueX+.4
-        planet_redblueY=planet_redblueY-.4
+        planet_redblueY=planet_redblueY+.4
     if(counter%600 > 300):
         counter2=counter2+.03
         planet_ringX=planet_ringX+.2
@@ -192,5 +192,6 @@ while running:
     planet_redblue()
     planet_green()
     planet_ring()
+    earth()
     player(playerX, playerY)
     pygame.display.update()
