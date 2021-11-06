@@ -2,7 +2,7 @@ import pygame
 
 pygame.init()
 
-screen = pygame.display.set_mode((800,800))
+screen = pygame.display.set_mode((1300,900))
 
 pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('astronaut.jpg')
@@ -21,28 +21,28 @@ def player(x, y):
 
 #background
 bg = pygame.image.load("bg.jpeg")
-bg = pygame.transform.scale(bg, (800,800))
+bg = pygame.transform.scale(bg, (1300,900))
 
 # Planets
 sun1 = pygame.image.load('sun.png')
-sun1 = pygame.transform.scale(sun1, (150, 150))
-sunX = 350
-sunY = 250
-
-planet_redblue1 = pygame.image.load('planet_redblue.png')
-planet_redblue1 = pygame.transform.scale(planet_redblue1, (50, 50))
-planet_redblueX = 370
-planet_redblueY = 480
+sun1 = pygame.transform.scale(sun1, (250, 250))
+sunX = 510
+sunY = 355
 
 planet_green1 = pygame.image.load('planet_green.png')
-planet_green1 = pygame.transform.scale(planet_green1, (50, 50))
-planet_greenX = 370
-planet_greenY = 400
+planet_green1 = pygame.transform.scale(planet_green1, (100, 100))
+planet_greenX = 580
+planet_greenY = 120
+
+planet_redblue1 = pygame.image.load('planet_redblue.png')
+planet_redblue1 = pygame.transform.scale(planet_redblue1, (70, 70))
+planet_redblueX = 330
+planet_redblueY = 700
 
 planet_ring1 = pygame.image.load('planet_ring.png')
-planet_ring1 = pygame.transform.scale(planet_ring1, (75, 50))
-planet_ringX= 370
-planet_ringY = 480
+planet_ring1 = pygame.transform.scale(planet_ring1, (110, 65))
+planet_ringX = 850
+planet_ringY = 700
 
 def background():
     screen.blit(bg, (0,0))
@@ -79,9 +79,20 @@ def newCanvas():
                     return
 
         pygame.display.update()
+        
+def movePlanet(pl):
+    for x in range (0,50):
+        planet_greenX=planet_greenX+1
+        planet_greenY=planet_greenY+1
+    for z in range(0,50):
+        planet_greenX=planet_greenX-1
+        planet_greenY=planet_greenY-1
+
 
 running = True
+counter = 0
 while running:
+    counter=counter+1
     screen.fill((0,0,0))
     collision_redblue = isCollision(playerX, playerY, planet_redblueX, planet_redblueY)
     collision_green = isCollision(playerX, playerY, planet_greenX, planet_greenY)
@@ -125,7 +136,24 @@ while running:
         playerY = 0
     elif playerY >= 750:
         playerY = 750
-
+        
+    #planetmovement  
+    if(counter%400 > 200):
+        planet_greenX=planet_greenX+.3
+        planet_redblueX=planet_redblueX-.3
+        planet_redblueY=planet_redblueY+.3
+        planet_ringX=planet_ringX+.3
+        planet_ringY=planet_ringY-.3
+        
+    else:
+        planet_greenX=planet_greenX-.3
+        planet_redblueX=planet_redblueX+.3
+        planet_redblueY=planet_redblueY-.3
+        planet_ringX=planet_ringX-.3
+        planet_ringY=planet_ringY+.3
+        if (counter == 1200):
+            counter = 0
+        
     background()
     player(playerX, playerY)
     sun()     
