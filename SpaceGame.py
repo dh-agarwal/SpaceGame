@@ -1,4 +1,5 @@
 import pygame
+from pygame import mixer
 
 pygame.init()
 
@@ -7,6 +8,8 @@ screen = pygame.display.set_mode((1300,900))
 pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('astronaut.jpg')
 pygame.display.set_icon(icon)
+pygame.font.init()
+fontdodgeGame = pygame.font.SysFont('Comic Sans MS', 30)
 
 # Player
 playerImg = pygame.image.load('spaceship.png')
@@ -16,6 +19,7 @@ playerX = 100
 playerY = 100
 playerX_change = 0
 playerY_change = 0
+
 # Player facing
 playerImgLeft = pygame.transform.rotate(playerImg, 270)
 playerImgRight = pygame.transform.rotate(playerImg, 90)
@@ -28,6 +32,10 @@ def player(x, y):
 #background
 bg = pygame.image.load("bg.jpeg")
 bg = pygame.transform.scale(bg, (1300,900))
+
+#music
+mixer.music.load('bgmusic.mp3')
+mixer.music.play(-1)
 
 # Planets
 sun1 = pygame.image.load('sun.png')
@@ -71,11 +79,12 @@ def isCollision(playerX, playerY, planetX, planetY):
         return True
     return False
 
-def newCanvas():
+def dodgingGame():
     running = True
     while running:
-        screen.fill((0,255,0))
-
+        screen.fill((255,255,255))
+        textsurface = fontdodgeGame.render('Some Text', False, (0, 0, 0))
+        screen.blit(textsurface,(0,0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -94,10 +103,10 @@ def movePlanet(pl):
         planet_greenX=planet_greenX-1
         planet_greenY=planet_greenY-1
 
-
-running = True
 counter = 0
 counter2 = 240
+
+running = True
 while running:
     counter=counter+1
     screen.fill((0,0,0))
@@ -106,19 +115,21 @@ while running:
     collision_ring = isCollision(playerX, playerY, planet_ringX, planet_ringY)
 
     if collision_redblue:
-        newCanvas()
+        dodgingGame()
         playerX = 100
         playerY = 100
     elif collision_green:
         print('Collided with the green planet!')
     elif collision_ring:
-        print('Colliede with the ring planet!')
+        print('Collided with the ring planet!')
 
     for event in pygame.event.get():
+        
         if event.type == pygame.QUIT:
             running = False
 
         if event.type == pygame.KEYDOWN:
+            
             if event.key == pygame.K_LEFT:
                 playerX_change = -2
                 playerImg1 = playerImgRight
@@ -131,9 +142,14 @@ while running:
             if event.key == pygame.K_DOWN:
                 playerY_change = 2
                 playerImg1 = playerImgDown
+                
         if event.type == pygame.KEYUP:
             playerX_change = 0
             playerY_change = 0
+            
+        #c_x, c_y = pygame.mouse.get_pos()
+        #if event.type == pygame.MOUSEBUTTONDOWN:
+            #if (((650-c_x)**2+(450-c_y)**2) < 2500):
 
     playerX += playerX_change
     playerY += playerY_change
