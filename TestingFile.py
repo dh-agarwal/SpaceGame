@@ -140,20 +140,24 @@ while running:
     #planetmovement  
     if(counter%400 > 200):
         planet_greenX=planet_greenX+.3
-        planet_redblueX=planet_redblueX-.3
-        planet_redblueY=planet_redblueY+.3
-        planet_ringX=planet_ringX+.3
-        planet_ringY=planet_ringY-.3
-        
     else:
         planet_greenX=planet_greenX-.3
-        planet_redblueX=planet_redblueX+.3
-        planet_redblueY=planet_redblueY-.3
-        planet_ringX=planet_ringX-.3
-        planet_ringY=planet_ringY+.3
-        if (counter == 1200):
-            counter = 0
+    if(counter%300 > 150):    
+        planet_redblueX=planet_redblueX-.4
+        planet_redblueY=planet_redblueY+.4
+    else:
+        planet_redblueX=planet_redblueX+.4
+        planet_redblueY=planet_redblueY-.4
+    if(counter%600 > 300):
+        planet_ringX=planet_ringX+.2
+        planet_ringY=planet_ringY-.2
+    else: 
+        planet_ringX=planet_ringX-.2
+        planet_ringY=planet_ringY+.2
         
+    if (counter == 1200):
+            counter = 0
+            
     background()
     player(playerX, playerY)
     sun()     
