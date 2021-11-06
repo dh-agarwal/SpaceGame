@@ -53,8 +53,8 @@ planet_ringY = 700
 def background():
     screen.blit(bg, (0,0))
 
-def sun():
-    screen.blit(sun1, (sunX, sunY))
+def sun(size):
+    screen.blit(pygame.transform.scale(sun1, (size, size)), (sunX, sunY))
 
 def planet_redblue():
     screen.blit(planet_redblue1, (planet_redblueX, planet_redblueY))
@@ -67,7 +67,7 @@ def planet_ring():
 
 # Collision
 def isCollision(playerX, playerY, planetX, planetY):
-    if playerX > planetX - 20 and playerX < planetX + 20 and playerY > planetY - 20 and playerY < planetY + 20:
+    if playerX > planetX - 30 and playerX < planetX + 30 and playerY > planetY - 30 and playerY < planetY + 30:
         return True
     return False
 
@@ -97,6 +97,7 @@ def movePlanet(pl):
 
 running = True
 counter = 0
+counter2 = 240
 while running:
     counter=counter+1
     screen.fill((0,0,0))
@@ -119,16 +120,16 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.7
+                playerX_change = -2
                 playerImg1 = playerImgRight
             if event.key == pygame.K_RIGHT:
-                playerX_change = 0.7
+                playerX_change = 2
                 playerImg1 = playerImgLeft
             if event.key == pygame.K_UP:
-                playerY_change = -0.7
+                playerY_change = -2
                 playerImg1 = playerImg
             if event.key == pygame.K_DOWN:
-                playerY_change = 0.7
+                playerY_change = 2
                 playerImg1 = playerImgDown
         if event.type == pygame.KEYUP:
             playerX_change = 0
@@ -152,26 +153,28 @@ while running:
         planet_greenX=planet_greenX+.3
     else:
         planet_greenX=planet_greenX-.3
-    if(counter%300 > 150):    
+    if(counter%300 > 150):
         planet_redblueX=planet_redblueX-.4
         planet_redblueY=planet_redblueY+.4
-    else:
+    else:        
         planet_redblueX=planet_redblueX+.4
         planet_redblueY=planet_redblueY-.4
     if(counter%600 > 300):
+        counter2=counter2+.03
         planet_ringX=planet_ringX+.2
         planet_ringY=planet_ringY-.2
-    else: 
+    else:
+        counter2=counter2-.03
         planet_ringX=planet_ringX-.2
         planet_ringY=planet_ringY+.2
         
     if (counter == 1200):
-            counter = 0
+        counter = 0
             
-    background()
-    player(playerX, playerY)
-    sun()     
+    background()    
+    sun(counter2)     
     planet_redblue()
     planet_green()
     planet_ring()
+    player(playerX, playerY)
     pygame.display.update()
