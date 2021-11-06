@@ -140,13 +140,13 @@ while running:
 
     if playerX <= 0:
         playerX = 0
-    elif playerX >= 750:
-        playerX = 750
+    elif playerX >= 1250:
+        playerX = 1250
 
     if playerY <= 0:
         playerY = 0
-    elif playerY >= 750:
-        playerY = 750
+    elif playerY >= 850:
+        playerY = 850
         
     #planetmovement  
     if(counter%400 > 200):
