@@ -8,6 +8,13 @@ pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('astronaut.jpg')
 pygame.display.set_icon(icon)
 
+# Planets
+planetImg = pygame.image.load('astronaut.jpeg')
+planetX = 370
+planetY = 480
+
+def planet():
+    screen.blit(planetImg, (planetX, planetY))
 
 running = True
 while running:
@@ -15,5 +22,5 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             
-    screen.fill((0,150,0))
+    planet()
     pygame.display.update()
