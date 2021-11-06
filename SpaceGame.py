@@ -5,11 +5,13 @@ pygame.init()
 
 screen = pygame.display.set_mode((1200,700))
 
-pygame.display.set_caption("Space Invaders")
+pygame.display.set_caption("Space Game")
 icon = pygame.image.load('astronaut.jpg')
 pygame.display.set_icon(icon)
+
+# Fonts
 pygame.font.init()
-fontdodgeGame = pygame.font.SysFont('Comic Sans MS', 30)
+font1 = pygame.font.SysFont('Papyrus', 40)
 
 # Player
 playerImg = pygame.image.load('spaceship.png')
@@ -29,13 +31,33 @@ playerImgDown = pygame.transform.rotate(playerImg, 180)
 def player(x, y):
     screen.blit(playerImg1, (x, y))
 
-#background
+# Backgrounds
 bg = pygame.image.load("bg.jpeg")
 bg = pygame.transform.scale(bg, (1200,700))
 
-#music
+ocean = pygame.image.load("underwater.png")
+ocean = pygame.transform.scale(ocean, (1200, 700))
+
+# Music
 mixer.music.load('bgmusic.mp3')
 mixer.music.play(-1)
+
+# Diver
+diver1 = pygame.image.load('diver.png')
+diver1 = pygame.transform.scale(diver1, (170,75))
+diverX = 60
+diverY = 400
+
+# Sea Monsters
+monst_1 = pygame.image.load('seamonst.png')
+monst_1 = pygame.transform.scale(monst_1, (170,75))
+monst1X = 800
+monst1Y = 300
+
+monst_2 = pygame.image.load('seamonst.png')
+monst_2 = pygame.transform.scale(monst_2, (170,75))
+monst2X = 800
+monst2Y = 100
 
 # Planets
 sun1 = pygame.image.load('sun.png')
@@ -63,8 +85,20 @@ earth1 = pygame.transform.scale(earth1, (30, 30))
 earthX = 20
 earthY = 20
 
+def diver():
+    screen.blit(diver1, (diverX, diverY))
+    
+def seamonst1():
+    screen.blit(monst_1, (monst1X, monst1Y))
+    
+def seamonst2():
+    screen.blit(monst_2, (monst2X, monst2Y))
+    
 def background():
     screen.blit(bg, (0,0))
+
+def oceanbg():
+    screen.blit(ocean, (0,0))
 
 def sun(size):
     screen.blit(pygame.transform.scale(sun1, (size, size)), (sunX, sunY))
@@ -87,20 +121,89 @@ def isCollision(playerX, playerY, planetX, planetY):
         return True
     return False
 
-def waterGame():
+# Game Over
+def gameOver():
     running = True
     while running:
         screen.fill((255,255,255))
-        textsurface = fontdodgeGame.render('Some Text', False, (0, 0, 0))
-        screen.blit(textsurface,(0,0))
+        text = font1.render('GOOD GAME. YOU DIED', True, (0, 0, 0))
+        screen.blit(text,(240,80))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    return
+                if event.key == pygame.K_RETURN:
+                    waterGame()
+                    
+        pygame.display.update()
 
+# Water Game
+
+def waterStart():
+    running = True
+    while running:
+        screen.fill((0,0,0))
+        oceanbg()
+        textsurface = font1.render('Avoid the monsters by swimming around past them.', True, (0, 0, 0))
+        textsurface2 = font1.render('Swim far enough to obtain a fuel tank.', True, (0, 0, 0))
+        textsurface3 = font1.render('Click enter to start.', True, (0, 0, 0))
+        screen.blit(textsurface,(240,80))
+        screen.blit(textsurface2,(310,120))
+        screen.blit(textsurface3,(420,200))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    waterGame()
+                    
+        pygame.display.update()
+        
+def waterGame():
+    running = True
+    global diverX
+    global diverY
+    diverX = 60
+    diverY = 400
+    diverX_change = 0
+    diverY_change = 0
+    while running:
+        screen.fill((0,0,0))
+        oceanbg()
+        diver()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+            if event.type == pygame.KEYDOWN:
+            
+                if event.key == pygame.K_LEFT:
+                    diverX_change = -.5
+                if event.key == pygame.K_RIGHT:
+                    diverX_change = .5
+                if event.key == pygame.K_UP:
+                    diverY_change = -2
+                if event.key == pygame.K_DOWN:
+                    diverY_change = 2
+                    
+            if event.type == pygame.KEYUP:
+                diverX_change = 0
+                diverY_change = 0
+        
+        diverX += diverX_change
+        diverY += diverY_change
+        diverX += .2
+        
+        if diverY <= 0:
+            diverY = 0
+        elif diverY >= 550:
+            diverY = 550
+            
+        if diverX <= 0:
+            diverX = 0
+        
         pygame.display.update()
 
 counter = 0
@@ -115,7 +218,7 @@ while running:
     collision_ring = isCollision(playerX, playerY, planet_ringX, planet_ringY)
 
     if collision_ring:
-        waterGame()
+        waterStart()
         playerX = 100
         playerY = 100
     elif collision_green:
