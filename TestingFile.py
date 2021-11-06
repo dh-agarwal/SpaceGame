@@ -59,11 +59,26 @@ def planet_green():
 def planet_ring():
     screen.blit(planet_ring1, (planet_ringX, planet_ringY))
 
-
+# Collision
 def isCollision(playerX, playerY, planetX, planetY):
     if playerX > planetX - 10 and playerX < planetX + 10 and playerY > planetY - 10 and playerY < planetY + 10:
         return True
     return False
+
+def newCanvas():
+    running = True
+    while running:
+        screen.fill((0,255,0))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return
+
+        pygame.display.update()
 
 running = True
 while running:
@@ -73,7 +88,9 @@ while running:
     collision_ring = isCollision(playerX, playerY, planet_ringX, planet_ringY)
 
     if collision_redblue:
-        print('Collided with the red and blue planet!')
+        newCanvas()
+        playerX = 100
+        playerY = 100
     elif collision_green:
         print('Collided with the green planet!')
     elif collision_ring:
@@ -85,13 +102,13 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.3
+                playerX_change = -0.5
             if event.key == pygame.K_RIGHT:
-                playerX_change = 0.3
+                playerX_change = 0.5
             if event.key == pygame.K_UP:
-                playerY_change = -0.3
+                playerY_change = -0.5
             if event.key == pygame.K_DOWN:
-                playerY_change = 0.3
+                playerY_change = 0.5
         if event.type == pygame.KEYUP:
             playerX_change = 0
             playerY_change = 0
