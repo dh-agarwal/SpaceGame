@@ -2,7 +2,7 @@ import pygame
 
 pygame.init()
 
-screen = pygame.display.set_mode((800,600))
+screen = pygame.display.set_mode((800,800))
 
 pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('astronaut.jpg')
@@ -10,14 +10,14 @@ pygame.display.set_icon(icon)
 
 #background
 bg = pygame.image.load("bg.jpeg")
-bg = pygame.transform.scale(bg, (800,600))
+bg = pygame.transform.scale(bg, (800,800))
 
 # Planets
 
 sun1 = pygame.image.load('sun.png')
 sun1 = pygame.transform.scale(sun1, (150, 150))
-sunX = 300
-sunY = 200
+sunX = 350
+sunY = 250
 
 planet_redblue1 = pygame.image.load('planet_redblue.png')
 planet_redblue1 = pygame.transform.scale(planet_redblue1, (50, 50))
