@@ -44,7 +44,7 @@ sunX = 470
 sunY = 260
 
 planet_green1 = pygame.image.load('planet_green.png')
-planet_green1 = pygame.transform.scale(planet_green1, (100, 100))
+planet_green1 = pygame.transform.scale(planet_green1, (75, 75))
 planet_greenX = 580
 planet_greenY = 80
 
@@ -83,7 +83,7 @@ def earth():
 
 # Collision
 def isCollision(playerX, playerY, planetX, planetY):
-    if playerX > planetX - 30 and playerX < planetX + 30 and playerY > planetY - 30 and playerY < planetY + 30:
+    if playerX > planetX - 40 and playerX < planetX + 40 and playerY > planetY - 40 and playerY < planetY + 40:
         return True
     return False
 
@@ -156,13 +156,13 @@ while running:
 
     if playerX <= 0:
         playerX = 0
-    elif playerX >= 1250:
-        playerX = 1250
+    elif playerX >= 1150:
+        playerX = 1150
 
     if playerY <= 0:
         playerY = 0
-    elif playerY >= 750:
-        playerY = 750
+    elif playerY >= 650:
+        playerY = 650
         
     #planetmovement  
     if(counter%400 > 200):
