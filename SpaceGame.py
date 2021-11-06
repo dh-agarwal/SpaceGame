@@ -206,6 +206,103 @@ def waterGame():
         
         pygame.display.update()
 
+def bossGame():
+    # Ship
+    shipImg = pygame.image.load('spaceship.png')
+    shipImg = pygame.transform.scale(shipImg, (50, 50))
+    shipImg = pygame.transform.rotate(shipImg, 270)
+    shipImg1 = shipImg
+    shipX = 100
+    shipY = 100
+    shipX_change = 0
+    shipY_change = 0
+
+    def ship(x, y):
+        screen.blit(shipImg1, (x, y))
+
+    # Boss
+    bossImg = pygame.image.load('alien.png')
+    bossImg = pygame.transform.scale(bossImg, (200, 200))
+    bossX = 990
+    bossY = 200
+    bossSpeed = 0.5
+
+    def boss():
+        screen.blit(bossImg, (bossX, bossY))
+
+    # Projectile
+    slimeImg = pygame.image.load('slime.png')
+    slimeImg = pygame.transform.scale(slimeImg, (50, 50))
+    slimeImg = pygame.transform.rotate(slimeImg, 90)
+    slimeX = bossX
+    slimeY = 0
+    slimeDX = -1
+    slimeDY = 0
+    slime_state = "ready"
+
+    def shoot_proj(x, y):
+        global slime_state
+        slime_state = "fire"
+        screen.blit(slimeImg, (x - 50, y + 75))
+
+    running = True
+    while running:
+        screen.fill((100,255,100))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return
+                if event.key == pygame.K_LEFT:
+                    shipX_change = -1
+                if event.key == pygame.K_RIGHT:
+                    shipX_change = 1
+                if event.key == pygame.K_UP:
+                    shipY_change = -1
+                if event.key == pygame.K_DOWN:
+                    shipY_change = 1
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    shipX_change = 0
+                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    shipY_change = 0
+        
+        if slimeX <= 0:
+            slimeX = 940
+            slime_state = "ready"
+
+        if slime_state is "fire":
+            shoot_proj(slimeX, bossY)
+            slimeX += slimeDX
+
+        if bossY == 400:
+            slime_state = "fire"
+
+        shipX += shipX_change
+        shipY += shipY_change
+
+        if shipX <= 0:
+            shipX = 0
+        elif shipX >= 1150:
+            shipX = 1150
+
+        if shipY <= 0:
+            shipY = 0
+        elif shipY >= 650:
+            shipY = 650
+
+        if bossY == 510 or bossY == 0:
+            bossSpeed *= -1
+            
+        bossY += bossSpeed
+
+        boss()
+        ship(shipX, shipY)
+        pygame.display.update()
+
 counter = 0
 counter2 = 240
 
@@ -222,7 +319,11 @@ while running:
         playerX = 100
         playerY = 100
     elif collision_green:
-        print('Collided with the green planet!')
+        bossGame()
+        playerX = 100
+        playerY = 100
+        playerX_change = 0
+        playerY_change = 0 
     elif collision_redblue:
         print('Collided with the redblue planet!')
 
