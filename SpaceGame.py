@@ -244,7 +244,7 @@ def bossGame():
         global slime_state
         slime_state = "fire"
         screen.blit(slimeImg, (x - 50, y + 75))
-
+#aaa
     running = True
     while running:
         screen.fill((100,255,100))
