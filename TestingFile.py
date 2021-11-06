@@ -27,6 +27,7 @@ def planet_frozen():
 
 running = True
 while running:
+    screen.fill((0,0,0))
     planet_redblueX=planet_redblueX+1
     planet_frozenY=planet_frozenY-1
     for event in pygame.event.get():
