@@ -1,5 +1,6 @@
 import pygame
 from pygame import mixer
+import math
 
 pygame.init()
 
@@ -37,6 +38,9 @@ bg = pygame.transform.scale(bg, (1200,700))
 
 ocean = pygame.image.load("underwater.png")
 ocean = pygame.transform.scale(ocean, (1200, 700))
+
+greenBg = pygame.image.load('slimebackground.jpg')
+greenBg = pygame.transform.scale(greenBg, (1200,700))
 
 # Music
 mixer.music.load('bgmusic.mp3')
@@ -96,6 +100,9 @@ def seamonst2():
     
 def background():
     screen.blit(bg, (0,0))
+
+def slimebg():
+    screen.blit(greenBg, (0,0))
 
 def oceanbg():
     screen.blit(ocean, (0,0))
@@ -206,6 +213,7 @@ def waterGame():
         
         pygame.display.update()
 
+# BOSS GAME
 def bossGame():
     # Ship
     shipImg = pygame.image.load('spaceship.png')
@@ -216,6 +224,7 @@ def bossGame():
     shipY = 100
     shipX_change = 0
     shipY_change = 0
+    shipHP = 5
 
     def ship(x, y):
         screen.blit(shipImg1, (x, y))
@@ -244,10 +253,24 @@ def bossGame():
         global slime_state
         slime_state = "fire"
         screen.blit(slimeImg, (x - 50, y + 75))
-#aaa
-    running = True
+
+    # Collision
+    def checkCollision(shipX, shipY, slimeX, slimeY):
+        # if shipX < slimeX + 60 and shipX > slimeX - 60 and shipY < slimeY + 60 and shipY > slimeY - 60:
+        #     print("Ship collided with slime projectile")
+        #     return True
+        # return False
+        distance = math.sqrt((math.pow(shipX - slimeX, 2)) + math.pow(shipY - slimeY, 2))
+        if distance < 100:
+            return True
+        return False
+
+    counter = 0
+    
     while running:
-        screen.fill((100,255,100))
+        # screen.fill((100,255,100))
+        screen.fill((0,0,0))
+        slimebg()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -270,20 +293,45 @@ def bossGame():
                 if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     shipY_change = 0
         
+        # Ship and projectile interactions
+        if shipHP == 0:
+            print("YOU LOST")
+            return
+
+        collision = checkCollision(shipX, shipY, slimeX, slimeY)
+        if collision:
+            slimeX = bossX
+            slime_state = "ready"
+            shipHP -= 1
+
+        # Projectile stuff
         if slimeX <= 0:
+            print("Slime projectile hit the screen edge")
             slimeX = 940
             slime_state = "ready"
 
-        if slime_state is "fire":
-            shoot_proj(slimeX, bossY)
+        if slime_state == "fire":
+            shoot_proj(slimeX, slimeY)
             slimeX += slimeDX
 
-        if bossY == 400:
+        #if bossY == 400:
+        #    slimeY = bossY
+        #    slime_state = "fire"
+
+        if (counter == 200 or counter == 400 or counter == 600 or counter == 800 or counter == 1000) and slime_state == "ready":
+            print("Firing projectile at 200 or 400")
+            slimeY = bossY
             slime_state = "fire"
 
+        
+        if counter == 1000:
+            counter = 0
+
+        # Ship movement
         shipX += shipX_change
         shipY += shipY_change
 
+        # Prevents ship from going outside the screen
         if shipX <= 0:
             shipX = 0
         elif shipX >= 1150:
@@ -294,14 +342,21 @@ def bossGame():
         elif shipY >= 650:
             shipY = 650
 
+        # Makes the boss bounce back and forth on the y axis
         if bossY == 510 or bossY == 0:
             bossSpeed *= -1
-            
         bossY += bossSpeed
 
         boss()
         ship(shipX, shipY)
+        counter += 1
         pygame.display.update()
+
+def bossGameStart():
+    running = True
+    while running:
+        screen.fill((0,0,0))
+        
 
 counter = 0
 counter2 = 240
